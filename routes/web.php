@@ -58,7 +58,7 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
 
     Route::get('/admin/panel', function () {
         return view('admin.panel');
-    });
+    })->name('admin_panel');
 
     Route::get('/admin/genre', [GenreController::class, 'index'])->name('admin_genre');
     Route::post('/admin/genre', [GenreController::class, 'store'])->name('admin_genre_post');
