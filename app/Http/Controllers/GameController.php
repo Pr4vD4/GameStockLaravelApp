@@ -6,6 +6,8 @@ use App\Models\Game;
 use App\Models\Genre;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 
 class GameController extends Controller
@@ -44,8 +46,8 @@ class GameController extends Controller
             'genre_id' => 'required|exists:genres,id',
         ]);
 
-        $imageName = $request->name . '_' . time() . 'image.' . $request->image->extension();
-        $fileName = $request->name . '_' . time() . '.' . $request->file->extension();
+        $imageName = str_replace(' ', '_',$request->name) . '_' . time() . 'image.' . $request->image->extension();
+        $fileName = str_replace(' ', '_',$request->name) . '_' . time() . '.' . $request->file->extension();
         $request->image->storeAs('public/images', $imageName);
         $request->file->storeAs('public/files', $fileName);
 
@@ -119,10 +121,15 @@ class GameController extends Controller
             $validated['image_url'] = $game->image_url;
 
         } else {
-            $imageName = $request->name . '_' . time() . 'image.' . $request->image->extension();
+
+            if (Storage::exists('public/images/'.$game->image)) {
+                Storage::delete('public/images/'.$game->image);
+            }
+
+            $imageName = str_replace(' ', '_',$request->name) . '_' . time() . 'image.' . $request->image->extension();
             $request->image->storeAs('public/images', $imageName);
 
-            $validated['image'] = $game->image;
+            $validated['image'] = $imageName;
             $validated['image_url'] = URL::to('/') . '/public/storage/images/' . $imageName;
 
         }
@@ -132,7 +139,12 @@ class GameController extends Controller
             $validated['download_link'] = $game->download_link;
 
         } else {
-            $fileName = $request->name . '_' . time() . '.' . $request->file->extension();
+
+            if (Storage::exists('public/files/'.$game->file)) {
+                Storage::delete('public/files/'.$game->file);
+            }
+
+            $fileName = str_replace(' ', '_',$request->name) . '_' . time() . '.' . $request->file->extension();
             $request->file->storeAs('public/files', $fileName);
 
             $validated['file'] = $fileName;
@@ -150,6 +162,11 @@ class GameController extends Controller
      */
     public function destroy(Game $game)
     {
+
+        if (Storage::exists('public/images/'.$game->image)) {
+            Storage::delete('public/images/'.$game->image);
+        }
+
         $game->delete();
 
         return redirect()->route('admin_game');
