@@ -118,3 +118,15 @@ hr .new1 {
 .back:hover {
     color: rgba(242, 244, 247, 0.5);
 }
+.btn-logout {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 40px;
+    background-color: #000;
+    color: white!important;
+}
+.btn-logout:hover {
+    background-color: #1c1f23;
+}

@@ -26,6 +26,7 @@
                 <div class=" d-flex mt-2 flex-column">
                     <button class="btn1 btn-dark">Edit Profile</button>
                     <a href="{{ url()->route('admin_panel') }}" class="btn1 btn-admin btn-dark mt-2" >Панель администартора</a>
+                    <a href="{{ url()->route('logout') }}" class="btn1 btn-logout btn-dark mt-2" >Выйти</a>
                 </div>
                 <div class="text mt-3">
                     <span>
