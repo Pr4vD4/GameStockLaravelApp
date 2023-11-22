@@ -1,3 +1,4 @@
+@php use App\Models\Background @endphp
 <!doctype html>
 <html lang="en">
 <head>
